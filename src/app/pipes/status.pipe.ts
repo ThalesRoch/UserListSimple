@@ -7,7 +7,7 @@ export class StatusPipe implements PipeTransform {
 
   transform(status: boolean ): string {
 
-    const INVALID_STATUS = status === null || status === undefined || !status;
+    const INVALID_STATUS = status === null || status === undefined;
 
     if(INVALID_STATUS) {
       return 'Status indisponível ou inválido'
