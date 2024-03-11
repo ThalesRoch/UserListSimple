@@ -12,10 +12,10 @@ export class UsersListComponent {
 
   usersList: IUser[] = UsersList;
 
-  @Output() positionUser = new EventEmitter<number>();
+  @Output('userSelected') userSelectedEmit = new EventEmitter<IUser>();
 
   onUsersSelected(user: IUser) {
-    this.positionUser.emit(this.positionUser.length);
+    this.userSelectedEmit.emit(user);
   }
 
 }
