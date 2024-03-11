@@ -11,12 +11,14 @@ import { IFilterOptions } from './interfaces/filter-options-interface';
 export class AppComponent implements  OnInit {
   userSelected : IUser = {} as IUser;
   showUserDetail : boolean = false;
-  usersList : IUser[] = []
+  usersList : IUser[] = [];
+  usersListFiltred : IUser[] = [];
 
   ngOnInit() {
     setTimeout(() => {
       this.usersList = UsersList;
-    }, 3000)
+      this.usersListFiltred = this.usersList;
+    }, 1)
 
   }
 
@@ -26,7 +28,25 @@ export class AppComponent implements  OnInit {
   }
 
   onFilter(filterOptions : IFilterOptions) {
+    this.usersListFiltred = this.filterUsersList(filterOptions, this.usersList);
 
+  }
+  filterUsersList(filterOptions: IFilterOptions, usersList: IUser[]): IUser[] {
+    let filteredList: IUser[] = [];
+
+    filteredList = this.filterUsersListByName(filterOptions.name, usersList);
+
+    return filteredList;
+  }
+  filterUsersListByName(name: string | undefined, usersList: IUser[]): IUser[] {
+    const NAME_NOT_TYPPED = name === undefined;
+
+    if(NAME_NOT_TYPPED) {
+      return usersList;
+    }
+
+    const filteredList = usersList.filter((user) => user.nome.toLocaleLowerCase().includes(name.toLocaleLowerCase()))
+    return filteredList;
   }
 
 }
