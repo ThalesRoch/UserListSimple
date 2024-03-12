@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IUser } from './interfaces/user/user.interface';
 import { UsersList } from './data/users-list';
 import { IFilterOptions } from './interfaces/filter-options-interface';
+import { isWithinInterval } from 'date-fns';
 
 @Component({
   selector: 'app-root',
@@ -12,12 +13,12 @@ export class AppComponent implements  OnInit {
   userSelected : IUser = {} as IUser;
   showUserDetail : boolean = false;
   usersList : IUser[] = [];
-  usersListFiltred : IUser[] = [];
+  usersListFiltered : IUser[] = [];
 
   ngOnInit() {
     setTimeout(() => {
       this.usersList = UsersList;
-      this.usersListFiltred = this.usersList;
+      this.usersListFiltered = this.usersList;
     }, 1)
 
   }
@@ -28,7 +29,7 @@ export class AppComponent implements  OnInit {
   }
 
   onFilter(filterOptions : IFilterOptions) {
-    this.usersListFiltred = this.filterUsersList(filterOptions, this.usersList);
+    this.usersListFiltered = this.filterUsersList(filterOptions, this.usersList);
 
   }
 
@@ -37,10 +38,27 @@ export class AppComponent implements  OnInit {
 
     filteredList = this.filterUsersListByName(filterOptions.name, usersList);
     filteredList = this.filterUsersListByStatus(filterOptions.status, usersList);
+    filteredList = this.filterUsersListByDate(filterOptions.startDate, filterOptions.endDate, filteredList)
 
 
     return filteredList;
   }
+  filterUsersListByDate(startDate: Date | undefined, endDate: Date | undefined, usersList: IUser[]): IUser[] {
+    const DATE_NOT_SELECTED = startDate === undefined || endDate === undefined;
+
+    if(DATE_NOT_SELECTED) {
+      return usersList;
+    }
+
+    const listFiltered = usersList.filter((user) => isWithinInterval(new Date(user.dataCadastro), {
+        start: startDate,
+        end: endDate,
+    }));
+    return listFiltered;
+
+
+  }
+
   filterUsersListByStatus(status: boolean | undefined, usersList: IUser[]): IUser[] {
     const STATUS_NOT_TYPPED = status === undefined;
 
