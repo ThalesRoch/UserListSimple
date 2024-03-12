@@ -15,7 +15,7 @@ export class FilterComponent {
   };
   statusList = [
     { description: 'Ativo', value: true },
-    { description: 'Inaivo', value: false },
+    { description: 'Inativo', value: false },
   ];
 
   @Output('onFilter') onFilterEmitt = new EventEmitter<IFilterOptions>();
