@@ -31,13 +31,27 @@ export class AppComponent implements  OnInit {
     this.usersListFiltred = this.filterUsersList(filterOptions, this.usersList);
 
   }
+
   filterUsersList(filterOptions: IFilterOptions, usersList: IUser[]): IUser[] {
     let filteredList: IUser[] = [];
 
     filteredList = this.filterUsersListByName(filterOptions.name, usersList);
+    filteredList = this.filterUsersListByStatus(filterOptions.status, usersList);
+
 
     return filteredList;
   }
+  filterUsersListByStatus(status: boolean | undefined, usersList: IUser[]): IUser[] {
+    const STATUS_NOT_TYPPED = status === undefined;
+
+    if(STATUS_NOT_TYPPED) {
+      return UsersList;
+    }
+
+    const filteredList = usersList.filter((user) => user.ativo === status);
+    return filteredList;
+  }
+
   filterUsersListByName(name: string | undefined, usersList: IUser[]): IUser[] {
     const NAME_NOT_TYPPED = name === undefined;
 
